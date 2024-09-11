@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from extensions import db
-# db = SQLAlchemy()
 
 # Association table between Project and Skill
 project_skill_association = db.Table('project_skill_association',
@@ -32,16 +31,18 @@ class Project(db.Model):
 
 class Skill(db.Model):
     __tablename__ = 'skill'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    category = db.Column(db.String(255), nullable=True)
-    display_order = db.Column(db.Integer, nullable=True)
-    
-    # Many-to-many relationship with Project via project_skill_association
-    # Many-to-many relationship with Experience via experience_skill_association
-    experiences = db.relationship('Experience', secondary=experience_skill_association, backref=db.backref('skills', lazy=True))
+    category = db.Column(db.String(255), nullable=True)  # Optional field for grouping skills
+    display_order = db.Column(db.Integer, nullable=True)  # Optional field to control display order
+
+    # Many-to-many relationship with Project (through an association table)
+    projects = db.relationship('Project', secondary='project_skill_association', backref=db.backref('skills', lazy=True))
+
+    # Many-to-many relationship with Experience (through an association table)
+    experiences = db.relationship('Experience', secondary='experience_skill_association', backref=db.backref('skills', lazy=True))
 
 class Experience(db.Model):
     __tablename__ = 'experience'
@@ -61,7 +62,7 @@ class Image(db.Model):
     __tablename__ = 'image'
     id = db.Column(db.Integer, primary_key=True)
     # Store the binary data of the image
-    data = db.Column(db.LargeBinary, nullable=False)
+    image_data = db.Column(db.LargeBinary, nullable=False)
     alt_text = db.Column(db.String(255), nullable=True) #optional
 
     # Foreign keys to reference Project and Experience tables

@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from extensions import db
-# from models import 
 
 app = Flask(__name__)
 
