@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from app import db
+from extensions import db
 # db = SQLAlchemy()
 
 # Association table between Project and Skill
