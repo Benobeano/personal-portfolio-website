@@ -59,11 +59,19 @@ class Experience(db.Model):
 
 class Image(db.Model):
     __tablename__ = 'image'
-    
     id = db.Column(db.Integer, primary_key=True)
-    file_path = db.Column(db.String(255), nullable=False)
-    alt_text = db.Column(db.String(255), nullable=True)
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    # Store the binary data of the image
+    data = db.Column(db.LargeBinary, nullable=False)
+    alt_text = db.Column(db.String(255), nullable=True) #optional
+
+    # Foreign keys to reference Project and Experience tables
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=True)
+    experience_id = db.Column(db.Integer, db.ForeignKey('experience.id'), nullable=True)
+
+    # Relationships with Project and Experience
+    project = db.relationship('Project', backref='images', lazy=True)
+    experience = db.relationship('Experience', backref='images', lazy=True)
+
 
 class Link(db.Model):
     __tablename__ = 'link'
