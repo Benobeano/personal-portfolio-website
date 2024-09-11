@@ -29,6 +29,9 @@ class Project(db.Model):
     # Many-to-many relationship with Skill via project_skill_association
     skills = db.relationship('Skill', secondary=project_skill_association, backref=db.backref('projects', lazy=True))
 
+    # Foreign key to Portfolio
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
 class Skill(db.Model):
     __tablename__ = 'skill'
 
@@ -44,6 +47,9 @@ class Skill(db.Model):
     # Many-to-many relationship with Experience (through an association table)
     experiences = db.relationship('Experience', secondary='experience_skill_association', backref=db.backref('skills', lazy=True))
 
+    # Foreign key to Portfolio
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
 class Experience(db.Model):
     __tablename__ = 'experience'
     
@@ -58,21 +64,20 @@ class Experience(db.Model):
     # Many-to-many relationship with Skill via experience_skill_association
     skills = db.relationship('Skill', secondary=experience_skill_association, backref='experiences')
 
+    # Foreign key to Portfolio
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
 class Image(db.Model):
     __tablename__ = 'image'
     id = db.Column(db.Integer, primary_key=True)
+
     # Store the binary data of the image
     image_data = db.Column(db.LargeBinary, nullable=False)
-    alt_text = db.Column(db.String(255), nullable=True) #optional
+    alt_text = db.Column(db.String(255), nullable=True)
 
     # Foreign keys to reference Project and Experience tables
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=True)
     experience_id = db.Column(db.Integer, db.ForeignKey('experience.id'), nullable=True)
-
-    # Relationships with Project and Experience
-    project = db.relationship('Project', backref='images', lazy=True)
-    experience = db.relationship('Experience', backref='images', lazy=True)
-
 
 class Link(db.Model):
     __tablename__ = 'link'
@@ -98,3 +103,22 @@ class User(db.Model):
     name = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+
+    # One-to-one relationship with Portfolio
+    portfolio = db.relationship('Portfolio', backref='user', uselist=False, cascade="all, delete-orphan")
+
+class Portfolio(db.Model):
+    __tablename__ = 'portfolio'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)  # Title of the portfolio
+    description = db.Column(db.Text, nullable=True)     # Optional description
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Timestamp of creation
+
+    # Foreign key to User
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    # Relationships with Projects, Experiences, and Skills
+    projects = db.relationship('Project', backref='portfolio', lazy=True, cascade="all, delete-orphan")
+    experiences = db.relationship('Experience', backref='portfolio', lazy=True, cascade="all, delete-orphan")
+    skills = db.relationship('Skill', backref='portfolio', lazy=True, cascade="all, delete-orphan")
