@@ -52,8 +52,6 @@ class Skill(db.Model):
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
 
 
-
-
 class Experience(db.Model):
     __tablename__ = 'experience'
     
@@ -70,9 +68,6 @@ class Experience(db.Model):
 
     # Foreign key to Portfolio
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
-
-
-
 
 class Image(db.Model):
     __tablename__ = 'image'
@@ -99,6 +94,7 @@ class ContactMessage(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    sent_to = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     message = db.Column(db.Text, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.utcnow)
