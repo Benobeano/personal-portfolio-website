@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from extensions import db
+from app.extensions import db
 
 # Association table between Project and Skill
 project_skill_association = db.Table('project_skill_association',
@@ -27,10 +27,11 @@ class Project(db.Model):
     links = db.relationship('Link', backref='project', lazy=True, cascade="all, delete-orphan")
     
     # Many-to-many relationship with Skill via project_skill_association
-    skills = db.relationship('Skill', secondary=project_skill_association, backref=db.backref('projects', lazy=True))
+    skills = db.relationship('Skill', secondary=project_skill_association, back_populates='projects')
 
     # Foreign key to Portfolio
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
 
 class Skill(db.Model):
     __tablename__ = 'skill'
@@ -42,13 +43,16 @@ class Skill(db.Model):
     display_order = db.Column(db.Integer, nullable=True)  # Optional field to control display order
 
     # Many-to-many relationship with Project (through an association table)
-    projects = db.relationship('Project', secondary='project_skill_association', backref=db.backref('skills', lazy=True))
+    projects = db.relationship('Project', secondary=project_skill_association, back_populates='skills')
 
     # Many-to-many relationship with Experience (through an association table)
-    experiences = db.relationship('Experience', secondary='experience_skill_association', backref=db.backref('skills', lazy=True))
-
+    experiences = db.relationship('Experience', secondary=experience_skill_association, back_populates='skills')
+    
     # Foreign key to Portfolio
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
+
+
 
 class Experience(db.Model):
     __tablename__ = 'experience'
@@ -62,10 +66,13 @@ class Experience(db.Model):
     end_date = db.Column(db.Date, nullable=True)
 
     # Many-to-many relationship with Skill via experience_skill_association
-    skills = db.relationship('Skill', secondary=experience_skill_association, backref='experiences')
+    skills = db.relationship('Skill', secondary=experience_skill_association, back_populates='experiences')
 
     # Foreign key to Portfolio
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
+
+
 
 class Image(db.Model):
     __tablename__ = 'image'
@@ -100,7 +107,8 @@ class User(db.Model):
     __tablename__ = 'user'
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(255), nullable=False)
+    last_name = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 

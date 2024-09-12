@@ -1,15 +1,7 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from extensions import db
+from app import create_app
 
-app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///portfolioDatabase.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-@app.route('/')
-def home():
-    return "Portfolio App!"
+# Create the app using the factory function
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
