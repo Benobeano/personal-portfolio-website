@@ -34,10 +34,5 @@ def list_users():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-        table_names = db.inspect(db.engine).get_table_names()
-        print("Tables in the database:", table_names)
-        list_users()
-        # create_user("a", "p", "aa", "pp")
         # run methods here
-        # list_users()
+        list_users()
