@@ -1,0 +1,23 @@
+<!--HTML page to for the user to login, 
+this is where the flask application will take the user when opening the website, uses login JS file-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amy and Ben's Personal Portfolios</title>
+</head>
+<body>
+    <h1>Amy and Ben's Personal Portfolios</h1>
+
+    <h2>Login</h1>
+    <div id = "msgs">{{messages}}</div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" /><br/><br/>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" /><br/><br/>
+    <button type="submit" id="login">Login</button>
+
+    <script src="{{url_for('static',filename='js/login.js')}}"></script>
+</body>
+</html>
