@@ -1,3 +1,5 @@
+# Run this file to create the portfolio database
+
 import os
 from app import create_app
 from app.extensions import db
@@ -9,7 +11,6 @@ os.makedirs(db_dir, exist_ok=True)
 # Set up the app
 app = create_app()
 
-# Use app context to create the tables in the database
 with app.app_context():
-    db.create_all()  # Create all tables based on the models
+    db.create_all()
     print("Database created successfully!")

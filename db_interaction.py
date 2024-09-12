@@ -17,6 +17,7 @@ def create_user(first_name, last_name, username, password_hash):
         db.session.add(new_user)
         db.session.commit()
         print(f"User '{username}' created successfully!")
+
 def add_new_user_with_repository(first_name, last_name, username, password):
     try:
         new_user = repo.create_user(first_name=first_name, last_name=last_name, username=username, password=password)
@@ -33,14 +34,5 @@ def list_users():
 
 if __name__ == '__main__':
     with app.app_context():
-        # print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-        
-        # Ensure all tables are created before interaction
-        # db.create_all()
-
-        # Example: Creating a new user
-        # create_user(first_name="John", last_name="Doe", username="johndoe", password_hash="hashed_password")
-
-        # Example: Listing all users
-        add_new_user_with_repository(first_name="John", last_name="Doe", username="johndoe", password="mypassword")
+        # run methods here
         list_users()
