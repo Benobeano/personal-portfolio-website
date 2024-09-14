@@ -5,42 +5,82 @@
     <title>{{ portfolio.title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body>
+<body class="background">
     <header>
-        <h1>{{ portfolio.title }}</h1>
+        <h1 class="box">{{ portfolio.title }}</h1>
         <p>{{ portfolio.description }}</p>
     </header>
 
-    <section id="projects">
-        <h2>Projects</h2>
-        <div class="project-list">
+    <div class="section">
+        {% for img in images %}
+            <img src="{{ url_for('get_image', image_id=img.id) }}" alt="{{ img.alt_text }}" class="img">
+        {% endfor %}
+    </div>
+
+    <section id="education" class="section">
+        <h2 class="box">Education</h2>
+        <ul class="education-list">
+            {% for education in education %}
+                <div class="education-card">
+                    <h3>{{ education.school }}</h3>
+                    <li><b>{{ education.degreeType}}</b></li>
+                    <li> Major: {{ education.major }} - Minor: {{ education.minor }}</li>
+                    <li>GPA : {{ education.gpa }}</li>
+                    <li>Graduation Year: {{ education.graduationYear }}</li>
+                </div>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="experience" class="section">
+        <h2 class="box">Experiences</h2>
+        <ul class="experience-list">
+            {% for experience in experience %}
+                <div class="experience-card">
+                    <h3>{{ experience.title }}</h3>
+                    <li><b>{{ experience.organization }}</b>- {{ experience.location }}</li>
+                    <li>{{ experience.description }}</li>
+                    <li>Start Date: {{ experience.start_date }}</li>
+                    <li>End Date: {{ experience.end_date }}</li>
+                </div>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="skill" class="section">
+        <h2 class="box">Skills</h2>
+        <ul class="skill-list">
+            {% for skill in skill %}
+                <li class="skill-card">
+                    <p>{{ skill.name }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="organization" class="section">
+        <h2 class="box">Organizations</h2>
+        <ul class="organization-list">
+            {% for organization in organization %}
+                <li class="organization-card">
+                    <h3>{{ organization.title }}</h3>
+                    <p><b>{{ organization.organization }}</b></p>
+                    <p>{{ organization.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="projects" class="section">
+        <h2 class="box">Projects</h2>
+        <ul class="project-list">
             {% for project in projects %}
                 <div class="project-card">
                     <h3>{{ project.title }}</h3>
-                    <p>{{ project.description }}</p>
-                    <p>Date Created: {{ project.date_created.strftime('%Y-%m-%d') }}</p>
-
-                    {% if project.images %}
-                        <div class="project-images">
-                            {% for image in project.images %}
-                                <img src="data:image/png;base64,{{ image.image_data | b64encode }}" alt="{{ image.alt_text }}">
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    {% if project.links %}
-                        <div class="project-links">
-                            <h4>Links:</h4>
-                            <ul>
-                                {% for link in project.links %}
-                                    <li><a href="{{ link.url }}">{{ link.description or link.url }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
+                    <li>{{ project.description }}</li>
                 </div>
             {% endfor %}
-        </div>
+        </ul>
     </section>
 
     <footer>

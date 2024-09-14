@@ -20,7 +20,6 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
     images = db.relationship('Image', backref='project', lazy=True, cascade="all, delete-orphan")
@@ -38,9 +37,6 @@ class Skill(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    category = db.Column(db.String(255), nullable=True)  # Optional field for grouping skills
-    display_order = db.Column(db.Integer, nullable=True)  # Optional field to control display order
 
     # Many-to-many relationship with Project (through an association table)
     projects = db.relationship('Project', secondary=project_skill_association, back_populates='skills')
@@ -50,8 +46,6 @@ class Skill(db.Model):
     
     # Foreign key to Portfolio
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
-
-
 
 
 class Experience(db.Model):
@@ -72,6 +66,29 @@ class Experience(db.Model):
     portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
 
 
+class Organization(db.Model):
+    __tablename__ = 'organization'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    organization = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
+
+
+class Education(db.Model):
+    __tablename__ = 'education'  # Corrected table name
+    
+    id = db.Column(db.Integer, primary_key=True)
+    school = db.Column(db.String(255), nullable=False)
+    major = db.Column(db.String(255), nullable=False)
+    minor = db.Column(db.String(255), nullable=True)  # Made minor nullable if it's optional
+    gpa = db.Column(db.Float, nullable=False)  # Corrected to Float
+    degreeType = db.Column(db.String(255), nullable=False)
+    graduationYear = db.Column(db.Integer, nullable=False)
+
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'), nullable=False)
 
 
 class Image(db.Model):
@@ -82,9 +99,11 @@ class Image(db.Model):
     image_data = db.Column(db.LargeBinary, nullable=False)
     alt_text = db.Column(db.String(255), nullable=True)
 
-    # Foreign keys to reference Project and Experience tables
+    # Foreign keys to reference Project, Experience, and User tables
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=True)
     experience_id = db.Column(db.Integer, db.ForeignKey('experience.id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Field for user association
+
 
 class Link(db.Model):
     __tablename__ = 'link'
@@ -93,6 +112,7 @@ class Link(db.Model):
     url = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+
 
 class ContactMessage(db.Model):
     __tablename__ = 'contact_message'
@@ -103,6 +123,7 @@ class ContactMessage(db.Model):
     message = db.Column(db.Text, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 class User(db.Model):
     __tablename__ = 'user'
     
@@ -111,9 +132,11 @@ class User(db.Model):
     last_name = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+    images = db.relationship('Image', backref='user', lazy=True, cascade="all, delete-orphan")  # Updated backref
 
     # One-to-one relationship with Portfolio
     portfolio = db.relationship('Portfolio', backref='user', uselist=False, cascade="all, delete-orphan")
+
 
 class Portfolio(db.Model):
     __tablename__ = 'portfolio'
@@ -126,7 +149,9 @@ class Portfolio(db.Model):
     # Foreign key to User
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
-    # Relationships with Projects, Experiences, and Skills
+    # Relationships with Projects, Experiences, Skills, Organizations, and Education
     projects = db.relationship('Project', backref='portfolio', lazy=True, cascade="all, delete-orphan")
     experiences = db.relationship('Experience', backref='portfolio', lazy=True, cascade="all, delete-orphan")
     skills = db.relationship('Skill', backref='portfolio', lazy=True, cascade="all, delete-orphan")
+    organizations = db.relationship('Organization', backref='portfolio', lazy=True, cascade="all, delete-orphan")
+    education = db.relationship('Education', backref='portfolio', lazy=True, cascade="all, delete-orphan")
