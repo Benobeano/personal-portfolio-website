@@ -1,0 +1,106 @@
+.background {
+    background-color: #FFFFFF;
+}
+
+.box {
+    background-color: #0A66C2;
+    color:#FFFFFF;
+}
+
+/* styles.css */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers horizontally */
+    justify-content: center; /* Centers vertically if height is set */
+    min-height: 100vh; /* Ensures full viewport height */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #FFFFFF; /* Light background color for contrast */
+}
+
+header, footer {
+    text-align: center; /* Centers text within header and footer */
+    margin: 20px 0;
+}
+
+h1, h2, h3 {
+    margin: 10px 0;
+}
+
+ul {
+    list-style: none; /* Removes default bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+.section {
+    text-align: center; /* Centers content within each section */
+    max-width: 800px; /* Limits the width of each section */
+    width: 100%;
+}
+
+img {
+    display: block;
+    margin: 20px auto; /* Centers images */
+    max-width: 300px; 
+    height: auto;
+    border-radius: 50%;
+}
+
+.experience-card, .skill-card, .organization-card, .project-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    text-align: center; /* Centers text within the card */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+}
+
+/* Additional centering for content within cards */
+.experience-list, .skill-list, .organization-list, .project-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content in each section */
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    margin: 20px auto;
+    overflow-x: auto;
+    align-content: flex-start;
+    flex-direction: row;
+}
+
+.skill-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 15px;
+    text-align: center;
+    min-width: 100px; /* Minimum width for each skill card */
+    max-width: 150px; /* Ensures consistent size */
+    flex: 0 0 auto; /* Prevents skill cards from growing or shrinking */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .skill-list {
+        flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    }
+}
