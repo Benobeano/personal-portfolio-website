@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Portfolios</h1>
+        <div class="portfolio-list">
+            {% for portfolio in portfolios %}
+            <div class="portfolio-card">
+                <h2>{{ portfolio.title }}</h2>
+                <p>{{ portfolio.description }}</p>
+                <a href="{{ url_for('show_portfolio', username=portfolio.user.username) }}">View Portfolio</a>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="message-form">
+            <h2>Send a Message</h2>
+            <form method="POST" action="{{ url_for('home') }}">
+                {{ form.hidden_tag() }}
+                <div>
+                    {{ form.sent_to.label }}<br>
+                    {{ form.sent_to() }}
+                </div>
+                <div>
+                    {{ form.name.label }}<br>
+                    {{ form.name() }}
+                </div>
+                <div>
+                    {{ form.email.label }}<br>
+                    {{ form.email() }}
+                </div>
+                <div>
+                    {{ form.message.label }}<br>
+                    {{ form.message() }}
+                </div>
+                <div>
+                    {{ form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
