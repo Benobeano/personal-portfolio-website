@@ -6,9 +6,9 @@ import base64
 def create_app():
     app = Flask(__name__)
 
-    # Configuration setup (from config.py)
+    # Initialize your routes
+    register_routes(app)
     app.config.from_object('config.Config')
-
     db.init_app(app)
     bcrypt.init_app(app)
 
@@ -18,6 +18,8 @@ def create_app():
         """Encode binary data to a base64 string."""
         return base64.b64encode(data).decode('utf-8')
 
+    # Register the filter with Jinja2
+    app.jinja_env.filters['b64encode'] = b64encode
     # Register the filter with Jinja2
     app.jinja_env.filters['b64encode'] = b64encode
 

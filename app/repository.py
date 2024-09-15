@@ -1,5 +1,5 @@
 from app.extensions import db, bcrypt
-from app.models import User
+from app.models import User, ContactMessage
 
 class Repository:
     def __init__(self):
@@ -20,3 +20,25 @@ class Repository:
         db.session.add(new_user)
         db.session.commit()
         return new_user
+
+    def add_message(name, email, message, sent_to):
+        """Adds a new message to the database."""
+        new_message = ContactMessage(
+            name=name,
+            email=email,
+            message=message,
+            sent_to=sent_to
+        )
+        db.session.add(new_message)
+        db.session.commit()
+        return new_message
+
+    def get_all_messages():
+        """Fetches all messages from the database."""
+        return ContactMessage.query.all()
+
+    def get_messages_by_portfolio(portfolio_id):
+        """Fetches all messages sent to a specific portfolio."""
+        return ContactMessage.query.filter_by(sent_to=portfolio_id).all()
+
+
