@@ -37,10 +37,6 @@ def register_routes(app):
 
         return render_template('home.html', portfolio_data=portfolio_data, form=form)
 
-        
-
-        return render_template('home.html', portfolio_data=portfolio_data, form=form)
-
     @app.route('/portfolio')
     def show_portfolio():
         # Get the username from the query parameter
