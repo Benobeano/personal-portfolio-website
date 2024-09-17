@@ -21,7 +21,7 @@ class Repository:
         db.session.commit()
         return new_user
 
-    def add_message(name, email, message, sent_to):
+    def add_message(self, *, name, email, message, sent_to):
         """Adds a new message to the database."""
         new_message = ContactMessage(
             name=name,

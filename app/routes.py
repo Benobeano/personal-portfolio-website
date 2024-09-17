@@ -1,7 +1,7 @@
 # from flask import render_template
 # from . import db
 from app.extensions import db
-from flask import abort, redirect, render_template, request, send_file, url_for
+from flask import abort, redirect, render_template, request, send_file, url_for,flash
 from app.forms import MessageForm
 from app.repository import Repository
 from io import BytesIO
@@ -14,22 +14,32 @@ def register_routes(app):
     def home():
         portfolios = Portfolio.query.all()
         form = MessageForm()
-        
+
+        portfolio_data = []
+        for portfolio in portfolios:
+            user = portfolio.user
+            user_image = user.images[0] if user.images else None
+            portfolio_data.append({
+                'portfolio': portfolio,
+                'user_image': user_image
+            })
+
         if form.validate_on_submit():
-            # Handle message submission
-            message = repo.add_message(
+            # Handle message submission and commit to the database
+            repo.add_message(
                 name=form.name.data,
                 email=form.email.data,
                 sent_to=form.sent_to.data,
                 message=form.message.data
             )
-            db.session.add(message)
-            db.session.commit()
-            flash('Message sent successfully!')
+            flash('Message sent successfully!', 'success')
             return redirect(url_for('home'))
-        
-        return render_template('home.html', portfolios=portfolios, form=form)
 
+        return render_template('home.html', portfolio_data=portfolio_data, form=form)
+
+        
+
+        return render_template('home.html', portfolio_data=portfolio_data, form=form)
 
     @app.route('/portfolio')
     def show_portfolio():
@@ -55,6 +65,7 @@ def register_routes(app):
         
         # Render the portfolio page with the projects, experiences, skills, and organizations
         return render_template('portfolio.html', portfolio=portfolio, projects=projects, experience=experience, skill=skill, organization=organization, images=images, education=education)
+    
     @app.route('/image/<int:image_id>')
     def get_image(image_id):
         """Serve an image by ID."""

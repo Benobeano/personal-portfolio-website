@@ -5,7 +5,7 @@ from app.models import Portfolio
 
 class MessageForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired()])
     sent_to = SelectField('Select Portfolio Owner', coerce=int, validators=[DataRequired()])
     message = TextAreaField('Message', validators=[DataRequired()])
     submit = SubmitField('Send Message')
@@ -13,4 +13,6 @@ class MessageForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
         # Dynamically load portfolio owners for the dropdown
-        self.sent_to.choices = [(p.user_id, p.title) for p in Portfolio.query.all()]
+        self.sent_to.choices = [
+            (p.user_id, f"{p.user.first_name} {p.user.last_name}") for p in Portfolio.query.all()
+        ]

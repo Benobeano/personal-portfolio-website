@@ -3,48 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Portfolios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Portfolios</h1>
-        <div class="portfolio-list">
-            {% for portfolio in portfolios %}
-            <div class="portfolio-card">
-                <h2>{{ portfolio.title }}</h2>
-                <p>{{ portfolio.description }}</p>
-                <a href="{{ url_for('show_portfolio', username=portfolio.user.username) }}">View Portfolio</a>
 
-            </div>
+
+    <!-- Add the image at the top of the page -->
+    <div class="header-image">
+        <img src="{{ url_for('static', filename='Images/forest.jpeg') }}" alt="Books" class="top-image">
+    </div>
+
+    <h1>Portfolio Browser</h1>
+    <!-- Flex container for portfolio browser and message form -->
+    <div class="container">
+        
+        <!-- Portfolio list (left side) -->
+        <div class="portfolio-list">
+            {% for item in portfolio_data %}
+                <div class="portfolio-card">
+                    {% if item.user_image %}
+                        <img src="data:image/jpeg;base64,{{ item.user_image.image_data|b64encode }}" alt="{{ item.user_image.alt_text }}" class="profile-image" />
+                    {% else %}
+                        <img src="{{ url_for('static', filename='default-profile.png') }}" alt="No image" class="profile-image" />
+                    {% endif %}
+    
+                    <!-- Display portfolio details -->
+                    <h2>{{ item.portfolio.title }}</h2>
+                    <p>{{ item.portfolio.description }}</p>
+                    <a href="{{ url_for('show_portfolio', username=item.portfolio.user.username) }}">View Portfolio</a>
+                </div>
             {% endfor %}
         </div>
 
+        <!-- Message form (right side) -->
         <div class="message-form">
             <h2>Send a Message</h2>
             <form method="POST" action="{{ url_for('home') }}">
                 {{ form.hidden_tag() }}
+
+                <div>
+                    {{ form.name.label }}<br>
+                    {{ form.name(size=32) }}
+                </div>
+                <div>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=32) }}
+                </div>
                 <div>
                     {{ form.sent_to.label }}<br>
                     {{ form.sent_to() }}
                 </div>
                 <div>
-                    {{ form.name.label }}<br>
-                    {{ form.name() }}
-                </div>
-                <div>
-                    {{ form.email.label }}<br>
-                    {{ form.email() }}
-                </div>
-                <div>
                     {{ form.message.label }}<br>
-                    {{ form.message() }}
+                    {{ form.message(rows=4, cols=40) }}
                 </div>
-                <div>
-                    {{ form.submit() }}
-                </div>
+                <button type="submit">Send Message</button>
             </form>
         </div>
+        
     </div>
 </body>
 </html>

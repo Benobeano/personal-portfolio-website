@@ -2,10 +2,12 @@ from datetime import datetime
 from app import create_app
 from app.extensions import db
 from app.repository import Repository
-from app.models import Education, Project, Skill, Experience, Image, Link, ContactMessage, User, Portfolio, Organization
+# from app.repository import Repository
+from app.models import Education, Project, Skill, Experience, Image, User, Portfolio, Organization
 
 # Create the Flask app instance
 app = create_app()
+repo = Repository()
 
 def create_user(first_name, last_name, username, password_hash):
     """Add a new user to the database."""
@@ -196,37 +198,69 @@ def show_all_tables_and_contents():
         tables = inspector.get_table_names()
 
         for table_name in tables:
-            print(f"\nTable: {table_name}")
+            if table_name != 'image':
+                print(f"\nTable: {table_name}")
 
-            # Reflect the table dynamically and query all its rows
-            if table_name in db.metadata.tables:
-                table = db.metadata.tables[table_name]
-            else:
-                table = db.Table(table_name, db.metadata, autoload_with=db.engine)
+                # Reflect the table dynamically and query all its rows
+                if table_name in db.metadata.tables:
+                    table = db.metadata.tables[table_name]
+                else:
+                    table = db.Table(table_name, db.metadata, autoload_with=db.engine)
 
-            # Query all rows in the table
-            rows = db.session.execute(table.select()).fetchall()
+                # Query all rows in the table
+                rows = db.session.execute(table.select()).fetchall()
 
-            # Get column names from the table
-            columns = table.columns.keys()
+                # Get column names from the table
+                columns = table.columns.keys()
 
-            # Display the rows
-            if rows:
-                for row in rows:
-                    # Use the column names to map row data to a dictionary
-                    row_dict = {column: getattr(row, column) for column in columns}
-                    print(row_dict)
-            else:
-                print("No data available in this table.")
+                # Display the rows
+                if rows:
+                    for row in rows:
+                        # Use the column names to map row data to a dictionary
+                        row_dict = {column: getattr(row, column) for column in columns}
+                        print(row_dict)
+                else:
+                    print("No data available in this table.")
+
+def get_all_images():
+    """Fetch all entries from the Image table, excluding the image_data field."""
+    print("Image table excluding image data")
+    with db.session() as session:
+        images = session.query(
+            Image.id, 
+            Image.alt_text, 
+            Image.project_id, 
+            Image.experience_id, 
+            Image.user_id
+        ).all()
+
+        # Print or return the images without image_data
+        for image in images:
+            print(f"ID: {image.id}, Alt Text: {image.alt_text}, Project ID: {image.project_id}, Experience ID: {image.experience_id}, User ID: {image.user_id}")
+
+        return images
+
+
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-        create_user_with_portfolio_and_image(
-            first_name="Amy",
-            last_name="Patel",
-            username="ampate01",
-            password_hash="amy",  # Replace with an actual hashed password
-            image_path="/Users/Development/GitHub/personal-portfolio-website/Images/amysImg.JPEG",  # Provide the correct path to your image
-            alt_text="Profile picture of Amy"
-        )
+        # db.create_all()
+        show_all_tables_and_contents()
+        # get_all_images()
+        # create_user_with_portfolio_and_image(
+        #     first_name="Amy",
+        #     last_name="Patel",
+        #     username="ampate01",
+        #     password_hash="amy",  # Replace with an actual hashed password
+        #     image_path="Images/amysImg.JPEG",  # Provide the correct path to your image
+        #     alt_text="Profile picture of Amy"
+        # )
+        # create_user_with_portfolio_and_image(
+        #     first_name="Ben",
+        #     last_name="Pena",
+        #     username="bpena10",
+        #     password_hash="ben",  # Replace with an actual hashed password
+        #     image_path="Images/placeHolder.jpeg",  # Provide the correct path to your image
+        #     alt_text="Empty pfp"
+        # )
+        
