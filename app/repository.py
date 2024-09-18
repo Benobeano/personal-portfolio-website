@@ -41,4 +41,8 @@ class Repository:
         """Fetches all messages sent to a specific portfolio."""
         return ContactMessage.query.filter_by(sent_to=portfolio_id).all()
 
+    def get_all_messages(self):
+        """Fetch all contact messages."""
+        return ContactMessage.query.all()
+
 

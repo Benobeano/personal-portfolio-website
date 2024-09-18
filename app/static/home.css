@@ -1,3 +1,4 @@
+/* Responsive styling for mobile screens */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;  /* Stack vertically on smaller screens */
@@ -9,6 +10,16 @@
     }
 }
 
+/* Align the user info text and button in a row */
+.user-info {
+    display: flex;               /* Use flexbox to align items horizontally */
+    justify-content: flex-end;   /* Align items to the right */
+    align-items: center;         /* Vertically align items in the center */
+    gap: 10px;                   /* Add some space between the text and the button */
+    margin-bottom: 20px;
+}
+
+/* Styling for the top header image */
 .top-image {
     width: 100%;
     height: auto;
@@ -17,6 +28,7 @@
     border-radius: 10px;
 }
 
+/* Responsive height adjustments for smaller screens */
 @media (max-width: 768px) {
     .top-image {
         max-height: 200px;  /* Reduce height for smaller screens */
@@ -36,6 +48,7 @@
     margin-bottom: 20px;
 }
 
+/* Main container for the portfolio and message form */
 .container {
     display: flex;
     justify-content: space-between;
@@ -44,6 +57,7 @@
     padding: 0 20px;  /* Padding on left and right for the container */
 }
 
+/* Message form styling */
 .message-form {
     flex: 1;
     max-width: 400px;  /* Prevent the form from becoming too wide */
@@ -54,14 +68,17 @@
     margin-right: 20px;  /* Margin to separate from the right edge */
 }
 
+/* Portfolio list styling */
 .portfolio-list {
     flex: 2;                         /* Portfolio section takes up more space */
 }
 
+/* Individual portfolio card styling */
 .portfolio-card {
     margin-bottom: 20px;             /* Space between portfolios */
 }
 
+/* Profile image styling */
 .profile-image {
     width: 50px;
     height: 50px;
@@ -69,6 +86,7 @@
     margin-right: 10px;
 }
 
+/* Styling for all buttons in forms */
 button {
     background-color: #007bff;
     color: white;
@@ -79,5 +97,21 @@ button {
 }
 
 button:hover {
+    background-color: #0056b3;
+}
+
+/* Login/Logout buttons using the .btn class */
+.btn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn:hover {
     background-color: #0056b3;
 }

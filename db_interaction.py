@@ -3,6 +3,8 @@ from app import create_app
 from app.extensions import db
 from app.repository import Repository
 # from app.repository import Repository
+from app.extensions import bcrypt
+
 from app.models import Education, Project, Skill, Experience, Image, User, Portfolio, Organization
 
 # Create the Flask app instance
@@ -36,7 +38,7 @@ def read_image(file_path):
     with open(file_path, 'rb') as file:
         return file.read()
     
-def create_user_with_portfolio_and_image(first_name, last_name, username, password_hash, image_path, alt_text=""):
+def create_user_with_portfolio_and_image(first_name, last_name, username, password_hash, image_path, alt_text="", role="user"):
     """Create a user with a full portfolio, including projects, skills, experiences, and a user image."""
     with app.app_context():
         # Check if the username already exists
@@ -45,12 +47,14 @@ def create_user_with_portfolio_and_image(first_name, last_name, username, passwo
             print(f"Username '{username}' already exists. Please choose a different username.")
             return
 
+        password_hash = bcrypt.generate_password_hash(password_hash).decode('utf-8')
         # Step 1: Create the User
         user = User(
             first_name=first_name,
             last_name=last_name,
             username=username,
-            password_hash=password_hash
+            password_hash=password_hash,
+            role=role  # Assign the role, defaulting to 'user'
         )
         db.session.add(user)
         db.session.commit()  # Save user to get the ID for the portfolio
@@ -251,9 +255,10 @@ if __name__ == '__main__':
         #     first_name="Amy",
         #     last_name="Patel",
         #     username="ampate01",
-        #     password_hash="amy",  # Replace with an actual hashed password
+        #     password_hash="amyPass",  # Replace with an actual hashed password
         #     image_path="Images/amysImg.JPEG",  # Provide the correct path to your image
-        #     alt_text="Profile picture of Amy"
+        #     alt_text="Profile picture of Amy",
+        #     role="admin"
         # )
         # create_user_with_portfolio_and_image(
         #     first_name="Ben",
@@ -263,4 +268,6 @@ if __name__ == '__main__':
         #     image_path="Images/placeHolder.jpeg",  # Provide the correct path to your image
         #     alt_text="Empty pfp"
         # )
+        # db.drop_all()
+
         
