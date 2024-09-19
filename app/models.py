@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from app.extensions import db
+from flask_login import UserMixin
+
 
 # Association table between Project and Skill
 project_skill_association = db.Table('project_skill_association',
@@ -119,12 +121,13 @@ class ContactMessage(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    sent_to = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     message = db.Column(db.Text, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'user'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -132,10 +135,18 @@ class User(db.Model):
     last_name = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    images = db.relationship('Image', backref='user', lazy=True, cascade="all, delete-orphan")  # Updated backref
+    role = db.Column(db.String(255), nullable=False)  # New attribute added
 
-    # One-to-one relationship with Portfolio
+    images = db.relationship('Image', backref='user', lazy=True, cascade="all, delete-orphan") 
     portfolio = db.relationship('Portfolio', backref='user', uselist=False, cascade="all, delete-orphan")
+    
+    def check_password(self, password):
+        """Check hashed password."""
+        return bcrypt.check_password_hash(self.password_hash, password)
+
+    def set_password(self, password):
+        """Hash the password."""
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
 
 class Portfolio(db.Model):
