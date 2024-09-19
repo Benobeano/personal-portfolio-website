@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
-# Instantiate the db in extensions so it can be accessed outside of application context. 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+login_manager = LoginManager()

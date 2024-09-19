@@ -2,24 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home - Select Portfolio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Select a Portfolio</h1>
-    </header>
 
-    <section>
-        <form action="{{ url_for('show_portfolio') }}" method="get">
-            <label for="username">Choose a user:</label>
-            <select name="username" id="username">
-                {% for user in users %}
-                    <option value="{{ user.username }}">{{ user.first_name }} {{ user.last_name }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit">View Portfolio</button>
-        </form>
-    </section>
+    <!-- Add a section to display the logged-in user or "Guest" -->
+    <div class="user-info">
+        <p>Logged in as: 
+            {% if current_user.is_authenticated %}
+                {{ current_user.username }}
+            {% else %}
+                Guest
+            {% endif %}
+        </p>
+
+        <!-- If the user is not logged in, show a login button -->
+        {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('login') }}" class="btn">Login</a>
+        {% else %}
+            <!-- If the user is logged in, show a logout button -->
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        {% endif %}
+    </div>
+
+    <!-- Add the image at the top of the page -->
+    <div class="header-image">
+        <img src="{{ url_for('static', filename='Images/forest.jpeg') }}" alt="Books" class="top-image">
+    </div>
+
+    <h1>Portfolio Browser</h1>
+
+    <!-- Flex container for portfolio browser and message form -->
+    <div class="container">
+        
+        <!-- Portfolio list (left side) -->
+        <div class="portfolio-list">
+            {% for item in portfolio_data %}
+                <div class="portfolio-card">
+                    {% if item.user_image %}
+                        <img src="data:image/jpeg;base64,{{ item.user_image.image_data|b64encode }}" alt="{{ item.user_image.alt_text }}" class="profile-image" />
+                    {% else %}
+                        <img src="{{ url_for('static', filename='default-profile.png') }}" alt="No image" class="profile-image" />
+                    {% endif %}
+    
+                    <!-- Display portfolio details -->
+                    <h2>{{ item.portfolio.title }}</h2>
+                    <p>{{ item.portfolio.description }}</p>
+                    <a href="{{ url_for('show_portfolio', username=item.portfolio.user.username) }}">View Portfolio</a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Message form (right side) -->
+        <div class="message-form">
+            <h2>Send a Message</h2>
+            <form method="POST" action="{{ url_for('home') }}">
+                {{ form.hidden_tag() }}
+
+                <div>
+                    {{ form.name.label }}<br>
+                    {{ form.name(size=32) }}
+                </div>
+                <div>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=32) }}
+                </div>
+                <div>
+                    {{ form.sent_to.label }}<br>
+                    {{ form.sent_to() }}
+                </div>
+                <div>
+                    {{ form.message.label }}<br>
+                    {{ form.message(rows=4, cols=40) }}
+                </div>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+        
+    </div>
+
+    <!-- Display contact messages if the user is an admin -->
+    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <h2>Contact Messages</h2>
+        <ul>
+            {% for message in contact_messages %}
+                <li>{{ message.name }}: {{ message.message }} (Sent to: {{ message.sent_to }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 </body>
 </html>
