@@ -115,3 +115,51 @@ button:hover {
 .btn:hover {
     background-color: #0056b3;
 }
+
+/* Contact messages section styling */
+.contact-messages {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Styling each message card */
+.message-card {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    list-style-type: none;
+}
+
+/* Styling for the message header */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Styling for the 'Sent to' field */
+.message-sent-to {
+    font-style: italic;
+    color: #888;
+}
+
+/* Styling for the message body */
+.message-body {
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: #333;
+}
+
+/* Styling for the message date */
+.message-date {
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+}
