@@ -121,10 +121,14 @@ class ContactMessage(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    sent_to = db.Column(db.String(255), nullable=False)
+    sent_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Use the user_id as foreign key
     email = db.Column(db.String(255), nullable=False)
     message = db.Column(db.Text, nullable=False)
     date_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship to the User table
+    recipient = db.relationship('User', backref='messages_sent', lazy=True)
+
 
 
 class User(UserMixin, db.Model):
