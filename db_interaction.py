@@ -249,7 +249,7 @@ def get_all_images():
 if __name__ == '__main__':
     with app.app_context():
         # db.create_all()
-        show_all_tables_and_contents()
+        # show_all_tables_and_contents()
         # get_all_images()
         # create_user_with_portfolio_and_image(
         #     first_name="Amy",
@@ -260,14 +260,14 @@ if __name__ == '__main__':
         #     alt_text="Profile picture of Amy",
         #     role="admin"
         # )
-        # create_user_with_portfolio_and_image(
-        #     first_name="Ben",
-        #     last_name="Pena",
-        #     username="bpena10",
-        #     password_hash="ben",  # Replace with an actual hashed password
-        #     image_path="Images/placeHolder.jpeg",  # Provide the correct path to your image
-        #     alt_text="Empty pfp"
-        # )
+        create_user_with_portfolio_and_image(
+            first_name="Ben",
+            last_name="Pena",
+            username="bpena10",
+            password_hash="ben",  # Replace with an actual hashed password
+            image_path="Images/placeHolder.jpeg",  # Provide the correct path to your image
+            alt_text="Empty pfp"
+        )
         # db.drop_all()
 
         

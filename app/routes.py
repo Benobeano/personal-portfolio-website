@@ -78,12 +78,11 @@ def register_routes(app):
                 'user_image': user_image
             })
 
-        # If the user is authenticated and is an admin, fetch contact messages
+        # If the user is an admin, fetch and display contact messages
         contact_messages = []
         if current_user.is_authenticated and current_user.role == 'admin':
             contact_messages = repo.get_all_messages()
-        
-        # Handle message form submission for all users (guests included)
+
         if form.validate_on_submit():
             # Handle message submission and commit to the database
             repo.add_message(
@@ -96,7 +95,6 @@ def register_routes(app):
             return redirect(url_for('home'))
 
         return render_template('home.html', portfolio_data=portfolio_data, form=form, contact_messages=contact_messages)
-
 
 
 

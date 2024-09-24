@@ -85,13 +85,27 @@
 
     <!-- Display contact messages if the user is an admin -->
     {% if current_user.is_authenticated and current_user.role == 'admin' %}
+    <div class="contact-messages">
         <h2>Contact Messages</h2>
         <ul>
             {% for message in contact_messages %}
-                <li>{{ message.name }}: {{ message.message }} (Sent to: {{ message.sent_to }})</li>
+                <li class="message-card">
+                    <div class="message-header">
+                        <strong>{{ message.name }}</strong> ({{ message.email }}) 
+                        <span class="message-sent-to">Sent to: {{ message.recipient.first_name }} {{ message.recipient.last_name }}</span>
+                    </div>
+                    <div class="message-body">
+                        {{ message.message }}
+                    </div>
+                    <div class="message-date">
+                        {{ message.date_submitted.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </div>
+                </li>
             {% endfor %}
         </ul>
-    {% endif %}
+    </div>
+{% endif %}
+
 
 </body>
 </html>
